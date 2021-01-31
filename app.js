@@ -68,14 +68,26 @@ app.post(
 // @access   Public
 app.get('/articles', async (req, res) => {
     try {
-      res.render("articles");
-      // const articles = await Article.find().sort({ date: -1 });
-      // res.json(articles);
+      const articles = await Article.find().sort({ date: -1 });
+      res.render("articles",{articles : articles});
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
   });
+
+// @route    GET api/articles/:id
+// @desc     View particular article
+// @access   Public
+app.get("/articles/:id", async(req,res) =>{
+  try {
+    const article = await Article.findById(req.params.id);
+    res.render("article", {article : article});
+  } catch {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route    POST api/article/new
 // @desc     Add a news article
