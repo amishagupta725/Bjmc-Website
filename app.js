@@ -28,9 +28,8 @@ app.get("/", (req,res)=>{
 // @access   Public
 app.get('/gallery', async (req, res) => {
     try {
-      res.render("gallery");
-      // const images = await Gallery.find().sort({ date: -1 });
-      // res.json(images);
+      const images = await Gallery.find().sort({ date: -1 });
+      res.render("gallery",{images:images});
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -119,8 +118,9 @@ app.post(
 // @access   Public
 app.get('/blogs', async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ date: -1 });
-    res.json(blogs);
+    // const blogs = await Blog.find().sort({ date: -1 });
+    // res.json(blogs);
+    res.render("blogs");
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
