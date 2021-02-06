@@ -5,6 +5,7 @@ const Gallery = require('./models/Gallery');
 const Blog = require('./models/Blog');
 const Article = require('./models/Article');
 const User = require('./models/User');
+var request = require("request");
 
 const app = express();
 // app.use(bodyParser.urlencoded({extended: true}));
@@ -68,7 +69,7 @@ app.post(
 app.get('/articles', async (req, res) => {
     try {
       const articles = await Article.find().sort({ date: -1 });
-      res.render("articles",{articles : articles});
+       res.render("articles",{articles : articles});
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -152,6 +153,27 @@ app.post(
     }
   }
 );
+
+// -------------------------------------------------------------
+// @route    GET /results
+// @desc     Searching News
+// @access   Public 
+
+app.get("/results",function(req,res){
+  var query = req.query.search;
+  console.log(query);
+  var url = 'http://newsapi.org/v2/everything?' +
+  'q='+query+'&' +
+  'apiKey=dac2facfdf1a47a9937ffd8504581c0d'; 
+request(url,function(error, response, body){
+    var status = response.statusCode;
+    console.log(status);
+    if(!error && response.statusCode==200){
+   var data = JSON.parse(body);
+   res.render("results",{data: data});
+}});
+});
+
 
 
 var port = process.env.PORT || 3000;
